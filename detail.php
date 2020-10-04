@@ -1,107 +1,63 @@
 <?php
-
     // SDK Mercado Pago
     require_once 'vendor/autoload.php';
-  
-    // Definir credenciales
-    MercadoPago\SDK::setAccessToken("APP_USR-6317427424180639-042414-47e969706991d3a442922b0702a0da44-469485398");
 
+    // Definir credenciales
+    MercadoPago\SDK::setAccessToken("APP_USR-6317427424180639-042414-47e969706991d3a442922b0702a0da44-469485398"); // Either
+   
     // Integrador
     MercadoPago\SDK::setIntegratorId("dev_24c65fb163bf11ea96500242ac130004");
 
-    // Crear objeto Preference
+    // Crea un objeto de preferencia
     $preference = new MercadoPago\Preference();
-  
-    // Datos adicionales
-    $preference->external_reference = "sebastian.ferrari@onlines.com.ar";
-    $preference->notification_url = "https://sebaferrari-mp-ecommerce-php.herokuapp.com";
-  
-    // Páginas de retorno
-    $preference->back_urls = array(
-        "success" => "https://".$_SERVER['HTTP_HOST']."/pago-success.php",
-        "failure" => "https://".$_SERVER['HTTP_HOST']."/pago-failure.php",
-        "pending" => "https://".$_SERVER['HTTP_HOST']."/pago-pending.php"
+
+
+    $preference->payment_methods = array(
+        "excluded_payment_methods" => array(
+          array("id" => "amex")
+        ),
+        "excluded_payment_types" => array(
+          array("id" => "atm")
+        ),
+        "installments" => 6
     );
-    $preference->auto_return = "approved";
-  
-    // Datos comprador
+
     $payer = new MercadoPago\Payer();
     $payer->name = "Lalo";
-    $payer->surname = "Lando";
+    $payer->surname = "Landa";
     $payer->email = "test_user_63274575@testuser.com";
     $payer->phone = array(
         "area_code" => 11,
-        "number" => 22223333
-    );
-    $payer->address = array(
-        "street_name" => "False",
-        "street_number" => 123,
-        "zip_code" => 1111
-    );
-  
-    // Crear item en Preference
-    $item = new MercadoPago\Item();
-    $item->id = "1234";
-    $item->title = $_POST['title'];
-    $item->description = "​Dispositivo móvil de Tienda e-commerce";
-    $item->picture_url = "https://".$_SERVER['HTTP_HOST']."/".$_POST['img'];
-    $item->quantity = 1;
-    $item->unit_price = (float) $_POST['price'];
-    $preference->items = array($item);
-  
-    // Métodos de pago
-    $preference->payment_methods = array(
-        "excluded_payment_methods" => array(
-            array("id" => "amex")
-        ),
-        "excluded_payment_types" => array(
-            array("id" => "atm")
-        ),
-        "installments" => 6
-    );
-  
-  // Guardar
-  $preference->save();
+        "number" => 1212121212
+      );
+      $payer->address = array(
+        "street_name" => "Fake",
+        "street_number" => "1234",
+        "zip_code" => "0000"
+      );
 
-    // Código de testeo
-    // Objeto para crear la estructura json
-    $o->external_reference = "sebastian.ferrari@onlines.com.ar";
-    $o->notification_url = "https://sebaferrari-mp-ecommerce-php.herokuapp.com";
-    $o->back_urls = array(
-        "success" => "https://".$_SERVER['HTTP_HOST']."/pago-success.php",
-        "failure" => "https://".$_SERVER['HTTP_HOST']."/pago-failure.php",
-        "pending" => "https://".$_SERVER['HTTP_HOST']."/pago-pending.php"
+    // Crea un ítem en la preferencia
+    $item = new MercadoPago\Item();
+    $item->id = 1234;
+    $item->title = $_POST['title'];
+    $item->description = "Dispositivo móvil de Tienda e-commerce";
+    $item->picture_url = "https://sebaferrari-mp-ecommerce-php.herokuapp.com".$_POST['img'];
+    $item->quantity = $_POST['unit'];
+    $item->unit_price = $_POST['price'];
+    $preference->items = array($item);
+
+    $preference->external_reference = "sebastian.ferrari@onlines.com.ar";
+
+    // Páginas de retorno
+    $preference->back_urls = array(
+        "success" => "https://sebaferrari-mp-ecommerce-php.herokuapp.com/pago-success.php",
+        "failure" => "https://sebaferrari-mp-ecommerce-php.herokuapp.com/pago-failure.php",
+        "pending" => "https://sebaferrari-mp-ecommerce-php.herokuapp.com/pago-pending.php"
     );
-    $o->auto_return = "approved";
-    $o->payer = array(
-        "name" => "Lalo",
-        "surname" => "Lando",
-        "email" => "test_user_63274575@testuser.com",
-        "phone" => array("area_code" => 11, "number" => 22223333),
-        "address" => array("street_name" => "False", "street_number" => 123, "zip_code" => 1111)
-    );
-    $o->items = array(
-        array(
-            "id" => "1234",
-            "title" => $_POST['title'],
-            "description" => "Dispositivo móvil de Tienda e-commerce",
-            "picture_url" => "https://".$_SERVER['HTTP_HOST']."/".$_POST['img'],
-            "quantity" => 1,
-            "unit_price" => (float) $_POST['price']
-        )
-    );
-    $o->payment_methods = array(
-        "exclude_payment_methods" => array(
-            array("id" => "amex")
-        ),
-        "exclude_payment_types" => array(
-            array("id" => "atm")
-        ),
-        "installments" => 6
-    );
-  
-    // Crear json
-    $jsonPreference = json_encode($o, JSON_UNESCAPED_UNICODE);
+    $preference->auto_return = "approved";
+    $preference->notification_url = "https://sebaferrari-mp-ecommerce-php.herokuapp.com/webhook.php";
+    $preference->payer = $payer;
+    $preference->save();
 ?>
 <!DOCTYPE html>
 <html class="supports-animation supports-columns svg no-touch no-ie no-oldie no-ios supports-backdrop-filter as-mouseuser" lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -117,7 +73,7 @@
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
     crossorigin="anonymous"></script>
 
-    <script src="https://www.mercadopago.com/v2/security.js" view="home"></script>
+    <script src="https://www.mercadopago.com/v2/security.js" view="item"></script>
 
     <link rel="stylesheet" href="./assets/category-landing.css" media="screen, print">
 
@@ -238,9 +194,6 @@
                                         </h3>
                                     </div>
                                     <a href="<?php echo $preference->init_point; ?>">Pagar la compra</a>
-                                    <p>&nbsp;</p>
-                                    <?php echo '<br><br>'; ?>
-                                    <?php echo $jsonPreference; ?>
                                 </div>
                             </div>
                         </div>
