@@ -3,6 +3,7 @@
   $status = $_GET['collection_status'];
   $reference = $_GET['external_reference'];
   $paymentType = $_GET['payment_type'];
+  $preferenceID = $_GET['preference_id'];
 ?>
 <!DOCTYPE html>
 <html class="supports-animation supports-columns svg no-touch no-ie no-oldie no-ios supports-backdrop-filter as-mouseuser" lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -230,6 +231,7 @@
                                     <h2>El pago se realizó correctamente.</h2>
                                     <hr>
                                     <b>ID pago:</b> <?php echo $paymentID ?><br>
+                                    <b>Preference ID:</b> <?php echo $preferenceID ?><br>
                                     <b>Estado:</b> <?php echo $status ?><br>
                                     <b>Medio de pago:</b> <?php echo $paymentType ?><br>
                                     <b>Referencia:</b> <?php echo $reference ?><br>

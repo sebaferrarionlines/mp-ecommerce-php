@@ -28,12 +28,12 @@
     $payer->email = "test_user_63274575@testuser.com";
     $payer->phone = array(
         "area_code" => 11,
-        "number" => 1212121212
+        "number" => 22223333
       );
       $payer->address = array(
-        "street_name" => "Fake",
-        "street_number" => "1234",
-        "zip_code" => "0000"
+        "street_name" => "False",
+        "street_number" => "123",
+        "zip_code" => "1111"
       );
 
     // Crea un ítem en la preferencia
