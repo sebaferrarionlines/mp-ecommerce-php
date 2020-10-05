@@ -2,7 +2,7 @@
 $json_event = file_get_contents('php://input', true);
 $json_event_decode = json_decode($json_event);
 $logFile = fopen("log-mp-json.txt", 'a') or die("Error creando archivo");
-fwrite($logFile, print_r($json_event_decode, true));
+fwrite($logFile, print_r($json_event, true));
 fclose($logFile);
 
 $logFile = fopen("log-mp-json-dos.txt", 'a') or die("Error creando archivo");
