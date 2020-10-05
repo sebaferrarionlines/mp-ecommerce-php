@@ -55,7 +55,7 @@
         "pending" => "https://sebaferrari-mp-ecommerce-php.herokuapp.com/pago-pending.php"
     );
     $preference->auto_return = "approved";
-    $preference->notification_url = "https://sebaferrari-mp-ecommerce-php.herokuapp.com/webhook.php";
+    $preference->notification_url = "https://sebaferrari-mp-ecommerce-php.herokuapp.com/webhook.php?source_news=webhooks";
     $preference->payer = $payer;
     $preference->save();
 ?>
